@@ -10,7 +10,21 @@ import teamRoutes from "./routes/teamRoutes.js";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+
+// ✅ Configure CORS to allow your frontend domain(s)
+app.use(
+  cors({
+    origin: [
+      "https://vznx.vercel.app",
+      "https://vznx-9l3l8qcno-ritik219202044-5129s-projects.vercel.app", // keep if you tested this version
+      "http://localhost:5173", // allow local dev frontend
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
+
+// ✅ Middleware
 app.use(express.json());
 
 // ✅ API Routes
@@ -18,9 +32,9 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/team", teamRoutes);
 
-// ✅ Test Route
+// ✅ Root Test Route
 app.get("/", (req, res) => {
-  res.send("VZNX Workspace API is running...");
+  res.send("VZNX Workspace API is running successfully 🚀");
 });
 
 // ✅ Connect MongoDB
