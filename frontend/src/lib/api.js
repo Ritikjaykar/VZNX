@@ -1,6 +1,9 @@
 export const BASE_URL = "https://vznx-fu2q.onrender.com/api";
 
 export async function http(path, options = {}) {
+  // 🧠 Debug log — now inside the function where `path` exists
+  console.log("🔍 API CALL RECEIVED:", path);
+
   // 🩹 Fix any accidental double slashes
   const cleanPath = path.startsWith("//") ? path.slice(1) : path;
 

@@ -14,13 +14,24 @@ const app = express();
 // ✅ Configure CORS to allow your frontend domain(s)
 app.use(
   cors({
-    origin: [
-      "https://vznx.vercel.app",
-      "https://vznx-9l3l8qcno-ritik219202044-5129s-projects.vercel.app", // keep if you tested this version
-      "http://localhost:5173", // allow local dev frontend
-    ],
+    origin: function (origin, callback) {
+      // Allow Vercel preview URLs and production
+      const allowedOrigins = [
+        /\.vercel\.app$/,  // Any Vercel domain
+        "http://localhost:5173"
+      ];
+      
+      if (!origin || allowedOrigins.some(pattern => 
+        pattern instanceof RegExp ? pattern.test(origin) : pattern === origin
+      )) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type"],
+    credentials: true
   })
 );
 
