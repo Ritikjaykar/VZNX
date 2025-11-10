@@ -1,14 +1,13 @@
-export const BASE_URL = "https://vznx-fu2q.onrender.com/api";
+const BASE_URL = "https://vznx-fu2q.onrender.com/api";
 
 export async function http(path, options = {}) {
-  // 🧠 Debug log — now inside the function where `path` exists
-  console.log("🔍 API CALL RECEIVED:", path);
-
-  // 🩹 Fix any accidental double slashes
-  const cleanPath = path.startsWith("//") ? path.slice(1) : path;
-
-  const url = `${BASE_URL}${cleanPath.startsWith("/") ? cleanPath : `/${cleanPath}`}`;
-  console.log("📡 Fetching from:", url); // helps debug
+  // Remove any leading slashes from path
+  const cleanPath = path.replace(/^\/+/, '');
+  
+  // Build URL with single slash
+  const url = `${BASE_URL}/${cleanPath}`;
+  
+  console.log("📡 Fetching:", url);
 
   const config = {
     method: options.method || "GET",
@@ -25,8 +24,8 @@ export async function http(path, options = {}) {
 
   if (!res.ok) {
     const text = await res.text();
-    console.error("❌ HTTP Error:", res.status, text);
-    throw new Error(`Request failed: ${res.status} ${res.statusText}`);
+    console.error("❌ Error:", res.status, text);
+    throw new Error(`Request failed: ${res.status}`);
   }
 
   return res.json();
